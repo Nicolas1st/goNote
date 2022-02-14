@@ -16,10 +16,10 @@ func (n *NoteEntity) GetAllByAuthor(author string) *[]Note {
 	db, closeConnection := n.DatabaseEnv.ConnectToDatabase()
 	defer closeConnection()
 
-	var notes *[]Note
-	db.Where(&Note{Author: author}).Find(notes)
+	var notes []Note
+	db.Where(&Note{Author: author}).Find(&notes)
 
-	return notes
+	return &notes
 }
 
 func (n *NoteEntity) StoreOne(note *Note) (*Note, error) {
@@ -38,22 +38,22 @@ func (n *NoteEntity) UpdateOneByID(id uint, title, content string) *Note {
 	db, closeConnection := n.DatabaseEnv.ConnectToDatabase()
 	defer closeConnection()
 
-	var note *Note
-	db.First(note, id)
+	var note Note
+	db.First(&note, id)
 
 	note.Title = title
 	note.Content = content
 	db.Save(note)
 
-	return note
+	return &note
 }
 
 func (n *NoteEntity) DeleteOneByID(id uint) *Note {
 	db, closeConnection := n.DatabaseEnv.ConnectToDatabase()
 	defer closeConnection()
 
-	var note *Note
-	db.Delete(note, id)
+	var note Note
+	db.Delete(&note, id)
 
-	return note
+	return &note
 }
