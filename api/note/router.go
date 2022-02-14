@@ -3,15 +3,33 @@ package api
 import (
 	"net/http"
 
+	"github.com/Nicolas1st/goNote/model/entities/note"
 	"github.com/gorilla/mux"
 )
 
-func NewNotesResourceRouter() {
-	m := mux.NewRouter()
+func NewNotesResourceRouter(n note.NoteEntity) *mux.Router {
+	router := mux.NewRouter()
+	router.Use(HeaderMiddleware)
 
-	m.HandleFunc("/notes/{id}", GetNote).Methods(http.MethodGet)
-	m.HandleFunc("/notes", GetAllNotes).Methods(http.MethodGet)
-	m.HandleFunc("/notes", CreateNote).Methods(http.MethodPost)
-	m.HandleFunc("/notes/{id}", UpdateNote).Methods(http.MethodPut)
-	m.HandleFunc("/notes/{id}", DeleteNote).Methods(http.MethodDelete)
+	router.Handle("/notes/{id:[0-9]+}/",
+		BuildGet(n.GetOneByID),
+	).Methods(http.MethodGet)
+
+	router.Handle("/notes/{author:[A-Za-z]+}/",
+		BuildGetAll(n.GetAllByAuthor),
+	).Methods(http.MethodGet)
+
+	router.Handle("/notes/",
+		BuildCreate(n.StoreOne),
+	).Methods(http.MethodPost)
+
+	router.Handle("/notes/{id:[0-9]+}/",
+		BuildUpdate(n.UpdateOneByID),
+	).Methods(http.MethodPut)
+
+	router.Handle("/notes/{id:[0-9]+}/",
+		BuildDelete(n.DeleteOneByID),
+	).Methods(http.MethodDelete)
+
+	return router
 }
