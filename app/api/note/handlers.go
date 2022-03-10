@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/Nicolas1st/goNote/model/entities/note"
+	"github.com/Nicolas1st/goNote/app/model/entities/note"
 	"github.com/gorilla/mux"
 )
 

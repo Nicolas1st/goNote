@@ -1,8 +1,8 @@
 package migrations
 
 import (
-	"github.com/Nicolas1st/goNote/model/database"
-	"github.com/Nicolas1st/goNote/model/entities/note"
+	"github.com/Nicolas1st/goNote/app/model/database"
+	"github.com/Nicolas1st/goNote/app/model/entities/note"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
