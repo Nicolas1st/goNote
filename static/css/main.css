@@ -1,0 +1,30 @@
+/* main section styling */
+/* and styles influencing layout and form/size of elements inside it */
+:root {
+    --main-section-radius: 50px;
+}
+
+.main {
+    height: 90%;
+    display: flex;
+}
+
+.form-container {
+    width: 35%;
+
+    border-top-left-radius: var(--main-section-radius);
+    border-bottom-left-radius: var(--main-section-radius);
+}
+
+.notes-container {
+    width: 65%;
+
+    border-top-right-radius: var(--main-section-radius);
+    border-bottom-right-radius: var(--main-section-radius);
+}
+
+/* header */
+h1.title {
+    font-size: 50px;
+    flex-grow: 0;
+}
