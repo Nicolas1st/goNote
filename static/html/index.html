@@ -15,19 +15,19 @@
                 <form action="" class="form">
                     <div class="field title-field">
                         <label for="title">Title</label>
-                        <input type="text" name="title" id="title">
+                        <input type="text" name="title" id="title" required>
                     </div>
                     <div class="field content-field" id="try">
                         <label for="content">Content</label>
-                        <textarea name="content" id="content"></textarea>
+                        <textarea name="content" id="content" required></textarea>
                         <!-- <input type="text" name="content" id="content"> -->
                     </div>
-                    <input type="submit" value="Add">
+                    <input type="submit" value="Add" id="create-new-note-button">
                 </form>
             </div>
             <div class="notes-container"></div>
         </main>
 
-        <script src="/static/js/main.js"></script>
+        <script src="/static/js/index.js"></script>
     </body>
 </html>
