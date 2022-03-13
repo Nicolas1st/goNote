@@ -1,8 +1,11 @@
+import { newNoteComponent } from "./components";
+
 // accepts an array of note objects
 // can ether add new notes to the list,
 // or replace the old one with the new ones
 // depending on the params
 export function displayNoteComponents(replace, ...notes) {
+    console.log("Display notes working");
     const notesContainer = document.querySelector(".notes-container");
 
     if (replace) {
@@ -11,6 +14,7 @@ export function displayNoteComponents(replace, ...notes) {
 
     // adding notes
     notes.forEach((note) => {
+        console.log(note);
         notesContainer.appendChild(newNoteComponent(note.Title, note.Content, note.ID));
     });
 }
