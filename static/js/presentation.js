@@ -17,10 +17,8 @@ export function displayNoteComponents(replace, ...notes) {
     });
 }
 
-export function removeNoteComponent(noteID) {
+export function removeNoteComponent(note) {
     const notesContainer = document.querySelector(".notes-container");
-
-    const elementToBeRemoved = notesContainer.querySelector($`[data-id="${noteID}"]`)
 
     notesContainer.removeChild(elementToBeRemoved);
 }
