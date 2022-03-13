@@ -9,24 +9,27 @@
 export async function loadNotes(authorName) {
     const response = await fetch(`/notes/${authorName}/`);
 
-    return await response.json();
+    return JSON.parse(JSON.stringify(await response.json()));
 }
 
 export async function createNote(authorName, noteTitle, noteContent) {
-    const response = await fetch(`/notes/${authorName}`, {
+    const response = await fetch(`/notes/`, {
         method: "POST",
+        header: {
+            'Content-Type': 'application/json'
+        },
         body: JSON.stringify({
             Title: noteTitle,
             Content: noteContent,
-            Author: authorName,
+            Author: authorName
         }),
     });
 
-    return await response.json();
+    return response.json();
 }
 
 export async function deleteNote(authorName, noteID) {
-    const response = await fetch(`/notes/${authorName}?id=${noteID}`, {
+    const response = await fetch(`/notes/${noteID}/`, {
         method: "DELETE",
     });
 
@@ -34,7 +37,7 @@ export async function deleteNote(authorName, noteID) {
 }
 
 export async function updateNote(authorName, noteID) {
-    const response = await fetch(`/notes/${authorName}?id=${noteID}`, {
+    const response = await fetch(`/notes/${noteID}/`, {
         method: "PUT",
         body: JSON.stringify({
             Title: noteTitle,
