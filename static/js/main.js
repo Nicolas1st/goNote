@@ -1,34 +1,66 @@
-// creating components
+import { displayNoteComponents, removeNoteComponent } from "./presentation.js";
+import { loadNotes, createNote, deleteNote } from "./network.js";
 
-function NewNoteComponent(noteTitle, noteContent) {
-    // note itself
-    const note = document.createElement("div");
-    note.classList.add("note");
+// loading available notes from the api on load
+document.addEventListener("DOMContentLoaded", async () => {
+    try {
+        const notes = await loadNotes("Nicolas");
+        displayNoteComponents(false, ...notes);
+    } catch (error) {
+        console.log("Could not connect to the api");
+        console.log(error);
+    }
+});
 
-    // note's title
-    const title = document.createElement("h2");
-    title.innerText = noteTitle;
-    title.classList.add("title");
+const newNoteForm = document.querySelector(".form");
+newNoteForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-    // note's content
-    const content = document.createElement("p");
-    content.innerText = noteContent;
-    content.classList.add("content");
+    const titleElement = newNoteForm.querySelector("#title");
+    const contentElement = newNoteForm.querySelector("#content");
 
-    // assembling
-    note.appendChild(title);
-    note.appendChild(content);
+    // making a request to create a note
+    // if successful displaying changes on the page
+    let createdNote;
+    try {
+        createdNote = await createNote(
+            "Nicolas",
+            titleElement.value,
+            contentElement.value
+        );
+    } catch (error) {
+        console.log("Error occured when making a request to the api");
+        console.log(error);
+    }
 
-    return note;
-}
+    // clearing the form fields
+    titleElement.value = "";
+    contentElement.value = "";
 
-// main
-const notes = document.querySelector(".notes-container");
+    // displaying the note
+    displayNoteComponents(false, createdNote);
+});
 
-const noteTitle= "Super Cool Note";
-const noteContent = "Engaging Contents";
+// removing a note
+const notesContainer = document.querySelector(".notes-container");
+notesContainer.addEventListener("click", async (e) => { const removeButton = e.target;
+    // checking whether it is a remove button
+    if (!removeButton.classList.contains("remove-button")) {
+        return;
+    }
 
-Array(10).fill().map(() => {
-    const note = NewNoteComponent(noteTitle, noteContent);
-    notes.appendChild(note);
+    // find the note that that has this button
+    const note = removeButton.closest(".note");
+
+    // making the api request
+    try {
+        const removedNote = await deleteNote("Nicolas", note.dataset.id);
+    } catch (error) {
+        console.log("Could not make the request to delete the note");
+        console.log(error);
+        return;
+    }
+
+    // removing the note from the dom if the request was successful
+    removeNoteComponent(note);
 });
