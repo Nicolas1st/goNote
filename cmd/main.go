@@ -13,6 +13,15 @@ import (
 
 func main() {
 
+	// serving the index page
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "../static/html/index.html")
+	})
+
+	// serving static files
+	fs := http.FileServer(http.Dir("../static/css"))
+	http.Handle("/static/css/", http.StripPrefix("/static/css/", fs))
+
 	// db initialization
 	dbEnv := database.Env{
 		DatabaseDialect: "sqlite3",
@@ -27,9 +36,11 @@ func main() {
 		DatabaseEnv: &dbEnv,
 	})
 
+	http.Handle("/notes", notesResource)
+
 	// running the server
 	port := ":8880"
 	fmt.Printf("Server is listening on port %v\n", port)
-	http.ListenAndServe(port, notesResource)
+	http.ListenAndServe(port, nil)
 
 }
