@@ -13,14 +13,13 @@ import (
 
 func main() {
 
-	// serving the index page
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "../static/html/index.html")
-	})
+	// serving css files
+	fsCSS := http.FileServer(http.Dir("../static/css"))
+	http.Handle("/static/css/", http.StripPrefix("/static/css/", fsCSS))
 
-	// serving static files
-	fs := http.FileServer(http.Dir("../static/css"))
-	http.Handle("/static/css/", http.StripPrefix("/static/css/", fs))
+	// serving js files
+	fsJS := http.FileServer(http.Dir("../static/js"))
+	http.Handle("/static/js/", http.StripPrefix("/static/js/", fsJS))
 
 	// db initialization
 	dbEnv := database.Env{
@@ -36,7 +35,12 @@ func main() {
 		DatabaseEnv: &dbEnv,
 	})
 
-	http.Handle("/notes", notesResource)
+	http.Handle("/notes/", notesResource)
+
+	// serving the index page
+	http.HandleFunc("/start", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "../static/html/index.html")
+	})
 
 	// running the server
 	port := ":8880"
