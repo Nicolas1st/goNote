@@ -13,9 +13,14 @@ export function newNoteComponent(noteTitle, noteContent, noteID) {
     content.innerText = noteContent;
     content.classList.add("content");
 
+    // note's remove button
+    const removeButton = document.createElement("div");
+    removeButton.classList.add("remove-button");
+
     // assembling
     note.appendChild(title);
     note.appendChild(content);
+    note.appendChild(removeButton);
 
     // setting data attributes
     note.dataset.id = noteID; 
