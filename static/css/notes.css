@@ -13,6 +13,8 @@
 }
 
 .note {
+    height: 300px;
+
     padding: 15px;
     border-radius: 20px;
 
@@ -36,11 +38,10 @@
     padding: 5px;
     border-radius: 10px;
 
+    flex-grow: 1;
+
     overflow: scroll;
     scrollbar-width: none;
-    /* color: inherit; */
-    color: black;
     font-size: 20px;
-    /* background-color: rgb(40, 70, 40); */
     background-color: white;
 }
