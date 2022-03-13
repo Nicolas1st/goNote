@@ -11,23 +11,23 @@ func NewNotesResourceRouter(n note.NoteEntity) *mux.Router {
 	router := mux.NewRouter()
 	router.Use(HeaderMiddleware)
 
-	router.Handle("/{id:[0-9]+}/",
+	router.Handle("/notes/{id:[0-9]+}/",
 		BuildGet(n.GetOneByID),
 	).Methods(http.MethodGet)
 
-	router.Handle("/{author:[A-Za-z]+}/",
+	router.Handle("/notes/{author:[A-Za-z]+}/",
 		BuildGetAll(n.GetAllByAuthor),
 	).Methods(http.MethodGet)
 
-	router.Handle("/",
+	router.Handle("/notes/",
 		BuildCreate(n.StoreOne),
 	).Methods(http.MethodPost)
 
-	router.Handle("/{id:[0-9]+}/",
+	router.Handle("/notes/{id:[0-9]+}/",
 		BuildUpdate(n.UpdateOneByID),
 	).Methods(http.MethodPut)
 
-	router.Handle("/{id:[0-9]+}/",
+	router.Handle("/notes/{id:[0-9]+}/",
 		BuildDelete(n.DeleteOneByID),
 	).Methods(http.MethodDelete)
 
