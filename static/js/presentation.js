@@ -20,7 +20,7 @@ export function displayNoteComponents(replace, ...notes) {
 export function removeNoteComponent(note) {
     const notesContainer = document.querySelector(".notes-container");
 
-    notesContainer.removeChild(elementToBeRemoved);
+    notesContainer.removeChild(note);
 }
 
 export function updateNoteComponent(note){
