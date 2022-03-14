@@ -28,7 +28,7 @@ export async function createNote(authorName, noteTitle, noteContent) {
     return response.json();
 }
 
-export async function deleteNote(authorName, noteID) {
+export async function deleteNote(noteID) {
     const response = await fetch(`/notes/${noteID}/`, {
         method: "DELETE",
     });
@@ -36,7 +36,7 @@ export async function deleteNote(authorName, noteID) {
     return await response.json();
 }
 
-export async function updateNote(authorName, noteID) {
+export async function updateNote(noteID, noteTitle, noteContent) {
     const response = await fetch(`/notes/${noteID}/`, {
         method: "PUT",
         body: JSON.stringify({
