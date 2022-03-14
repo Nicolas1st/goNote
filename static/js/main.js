@@ -1,5 +1,5 @@
-import { displayNoteComponents, removeNoteComponent } from "./presentation.js";
-import { loadNotes, createNote, deleteNote } from "./network.js";
+import { displayNoteComponents, removeNoteComponent, updateNoteComponent } from "./presentation.js";
+import { loadNotes, createNote, deleteNote, updateNote } from "./network.js";
 
 // loading available notes from the api on load
 document.addEventListener("DOMContentLoaded", async () => {
@@ -80,7 +80,7 @@ notesContainer.addEventListener("click", async (e) => { const removeButton = e.t
 
     // making the api request
     try {
-        const removedNote = await deleteNote("Nicolas", note.dataset.id);
+        const removedNote = await deleteNote(note.dataset.id);
     } catch (error) {
         console.log("Could not make the request to delete the note");
         console.log(error);
@@ -89,4 +89,23 @@ notesContainer.addEventListener("click", async (e) => { const removeButton = e.t
 
     // removing the note from the dom if the request was successful
     removeNoteComponent(note);
+});
+
+document.addEventListener("notechange", async (e) => {
+    const note = e.target;
+
+    const id = note.dataset.id;
+    const title = note.querySelector(".title").innerText;
+    const content = note.querySelector(".content").innerText;
+
+    let updatedNote;
+    try {
+        updatedNote = await updateNote(id, title, content);
+    } catch (error) {
+        console.log("Could not make the request to delete the note");
+        console.log(error);
+        return;
+    }
+
+    updateNoteComponent(updatedNote);
 });
