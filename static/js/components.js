@@ -13,6 +13,8 @@ export function newNoteComponent(noteTitle, noteContent, noteID) {
     content.innerText = noteContent;
     content.classList.add("content");
 
+    content.appendChild(newSaveButton());
+
     // note's remove button
     const removeButton = document.createElement("div");
     removeButton.classList.add("remove-button");
@@ -26,4 +28,12 @@ export function newNoteComponent(noteTitle, noteContent, noteID) {
     note.dataset.id = noteID; 
 
     return note;
+}
+
+export function newSaveButton() {
+    const button = document.createElement("div");
+    button.classList.add("save-changes-button");
+    button.innerText = "Save";
+
+    return button;
 }
