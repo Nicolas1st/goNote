@@ -15,6 +15,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 const newNoteForm = document.querySelector(".form");
 newNoteForm.addEventListener("submit", async (e) => {
     e.preventDefault();
+    if (!newNoteForm.reportValidity()) {
+        return;
+    }
 
     const titleElement = newNoteForm.querySelector("#title");
     const contentElement = newNoteForm.querySelector("#content");
@@ -39,6 +42,29 @@ newNoteForm.addEventListener("submit", async (e) => {
 
     // displaying the note
     displayNoteComponents(false, createdNote);
+});
+
+// handling Enter key presses on form
+newNoteForm.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+        // fire submit form event if shift and enter are pressed together
+        if (e.shiftKey) {
+            e.target.form.dispatchEvent(
+                new Event("submit", { cancelable: true })
+            );
+            e.preventDefault();
+        }
+
+        // prevent the input element from firing the submit event
+        if (e.target instanceof HTMLInputElement) {
+            e.preventDefault();
+
+            const nextEl = e.target.parentElement.nextSibling.nextSibling.querySelector(".form-input");
+            if (nextEl instanceof HTMLElement) {
+                nextEl.focus();
+            }
+        }
+    }
 });
 
 // removing a note
