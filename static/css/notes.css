@@ -5,7 +5,6 @@
 
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(4, 1fr);
     row-gap: 30px;
     column-gap: 30px;
 
@@ -14,6 +13,7 @@
 
 .note {
     height: 300px;
+    min-width: 0;
 
     padding: 15px;
     border-radius: 20px;
@@ -28,22 +28,31 @@
     background-color: rgb(73, 107, 57);
 }
 
-.note .title {
+.note .title, .note .content {
     padding: 5px;
     border-radius: 10px;
+    scrollbar-width: none;
+}
+
+.note .title {
+    width: 82%;
+    min-height: 46px;
+    max-height: 46px;
+
+    overflow-x: scroll;
+    overflow-y: hidden;
 
     color: inherit;
     font-size: 30px;
 }
 
 .note .content {
-    padding: 5px;
-    border-radius: 10px;
-
     flex-grow: 1;
 
+    overflow-wrap: break-word;
     overflow: scroll;
-    scrollbar-width: none;
+
+
     font-size: 20px;
     background-color: white;
 }
@@ -61,11 +70,11 @@
     border-radius: 50%;
 
     position: absolute;
-    top: 25px;
+    top: 22px;
     right: 15px;
 
 
-    background-color: red;
+    background-color: coral;
 }
 
 .note .remove-button::before, .note .remove-button::after {
