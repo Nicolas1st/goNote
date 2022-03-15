@@ -28,7 +28,6 @@ export function newNoteComponent(noteTitle, noteContent, noteID) {
         note.removeChild(saveChangesButton);
         note.dataset.modified = false;
 
-        console.log("Dispatching the event");
         note.dispatchEvent(new Event("notechange", {
             bubbles: true,
         }));
