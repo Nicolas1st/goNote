@@ -9,3 +9,10 @@ body {
 
     background-color: bisque;
 }
+
+@media screen and (max-width: 1130px) {
+    body {
+        height: 160vh;
+    }
+}
+

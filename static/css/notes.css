@@ -5,8 +5,8 @@
 
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    row-gap: 30px;
-    column-gap: 30px;
+    grid-template-rows: repeat(3, 1fr);
+    gap: 30px;
 
     background-color: rgb(1, 83, 1);
 }
@@ -28,7 +28,8 @@
     background-color: rgb(73, 107, 57);
 }
 
-.note .title, .note .content {
+.note .title,
+.note .content {
     padding: 5px;
     border-radius: 10px;
     scrollbar-width: none;
@@ -41,6 +42,7 @@
 
     overflow-x: scroll;
     overflow-y: hidden;
+    white-space: nowrap;
 
     color: inherit;
     font-size: 30px;
@@ -74,11 +76,11 @@
     top: 22px;
     right: 15px;
 
-
     background-color: coral;
 }
 
-.note .remove-button::before, .note .remove-button::after {
+.note .remove-button::before,
+.note .remove-button::after {
     height: 24px;
     width: 5px;
     border-radius: 2.5px;
@@ -87,7 +89,7 @@
     top: 50%;
     left: 50%;
 
-    content: '';
+    content: "";
     background-color: black;
 }
 
@@ -109,4 +111,16 @@
     align-items: center;
 
     background-color: greenyellow;
+}
+
+@media screen and (max-width: 1400px) {
+    .notes-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .notes-container {
+        grid-template-columns: 1fr;
+    }
 }

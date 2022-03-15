@@ -68,3 +68,9 @@
 .form-container input[type=submit] {
     background-color: greenyellow;
 }
+
+@media screen and (max-width: 420px) {
+    .form-title {
+        font-size: 35px;
+    }
+}
