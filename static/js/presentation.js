@@ -27,7 +27,7 @@ export function updateNoteComponent(note){
     const notesContainer = document.querySelector(".notes-container")
 
     const newNote = newNoteComponent(note.Title, note.Content, note.ID);
-    const oldNote = notesContainer.querySelector($`[data-id="${note.ID}"]`)
+    const oldNote = notesContainer.querySelector(`[data-id="${note.ID}"]`)
 
     notesContainer.replaceChild(newNote, oldNote);
 }
