@@ -1,11 +1,11 @@
-import { displayNoteComponents, removeNoteComponent, updateNoteComponent } from "./presentation.js";
-import { loadNotes, createNote, deleteNote, updateNote } from "./network.js";
+import { presentation } from "./presentation.js";
+import { network } from "./network.js";
 
 // loading available notes from the api on load
 document.addEventListener("DOMContentLoaded", async () => {
     try {
-        const notes = await loadNotes("Nicolas");
-        displayNoteComponents(false, ...notes);
+        const notes = await network.loadNotes("Nicolas");
+        presentation.displayNoteComponents(false, ...notes);
     } catch (error) {
         console.log("Could not connect to the api");
         console.log(error);
@@ -26,7 +26,7 @@ newNoteForm.addEventListener("submit", async (e) => {
     // if successful displaying changes on the page
     let createdNote;
     try {
-        createdNote = await createNote(
+        createdNote = await network.createNote(
             "Nicolas",
             titleElement.value,
             contentElement.value
@@ -41,7 +41,7 @@ newNoteForm.addEventListener("submit", async (e) => {
     contentElement.value = "";
 
     // displaying the note
-    displayNoteComponents(false, createdNote);
+    presentation.displayNoteComponents(false, createdNote);
 });
 
 // handling Enter key presses on form
@@ -80,7 +80,7 @@ notesContainer.addEventListener("click", async (e) => { const removeButton = e.t
 
     // making the api request
     try {
-        const removedNote = await deleteNote(note.dataset.id);
+        const removedNote = await network.deleteNote(note.dataset.id);
     } catch (error) {
         console.log("Could not make the request to delete the note");
         console.log(error);
@@ -88,7 +88,7 @@ notesContainer.addEventListener("click", async (e) => { const removeButton = e.t
     }
 
     // removing the note from the dom if the request was successful
-    removeNoteComponent(note);
+    presentation.removeNoteComponent(note);
 });
 
 document.addEventListener("notechange", async (e) => {
@@ -100,12 +100,12 @@ document.addEventListener("notechange", async (e) => {
 
     let updatedNote;
     try {
-        updatedNote = await updateNote(id, title, content);
+        updatedNote = await network.updateNote(id, title, content);
     } catch (error) {
         console.log("Could not make the request to delete the note");
         console.log(error);
         return;
     }
 
-    updateNoteComponent(updatedNote);
+    presentation.updateNoteComponent(updatedNote);
 });

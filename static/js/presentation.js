@@ -1,33 +1,38 @@
-import { newNoteComponent } from "./components";
+import { components } from "./components";
 
 // accepts an array of note objects
 // can ether add new notes to the list,
 // or replace the old one with the new ones
 // depending on the params
-export function displayNoteComponents(replace, ...notes) {
-    const notesContainer = document.querySelector(".notes-container");
 
-    if (replace) {
-        notesContainer.innerHTML = "";
-    }
+export const presentation = {
+    displayNoteComponents: function (replace, ...notes) {
+        const notesContainer = document.querySelector(".notes-container");
 
-    // adding notes
-    notes.forEach((note) => {
-        notesContainer.appendChild(newNoteComponent(note.Title, note.Content, note.ID));
-    });
-}
+        if (replace) {
+            notesContainer.innerHTML = "";
+        }
 
-export function removeNoteComponent(note) {
-    const notesContainer = document.querySelector(".notes-container");
+        // adding notes
+        notes.forEach((note) => {
+            notesContainer.appendChild(
+                components.newNoteComponent(note.Title, note.Content, note.ID)
+            );
+        });
+    },
 
-    notesContainer.removeChild(note);
-}
+    removeNoteComponent: function (note) {
+        const notesContainer = document.querySelector(".notes-container");
 
-export function updateNoteComponent(note){
-    const notesContainer = document.querySelector(".notes-container")
+        notesContainer.removeChild(note);
+    },
 
-    const newNote = newNoteComponent(note.Title, note.Content, note.ID);
-    const oldNote = notesContainer.querySelector(`[data-id="${note.ID}"]`)
+    updateNoteComponent: function (note) {
+        const notesContainer = document.querySelector(".notes-container");
 
-    notesContainer.replaceChild(newNote, oldNote);
-}
+        const newNote = components.newNoteComponent(note.Title, note.Content, note.ID);
+        const oldNote = notesContainer.querySelector(`[data-id="${note.ID}"]`);
+
+        notesContainer.replaceChild(newNote, oldNote);
+    },
+};

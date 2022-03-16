@@ -6,13 +6,16 @@
 
 /* it's the calling code responsibility to check for errors */
 
-export async function loadNotes(authorName) {
+export const network = {
+
+
+loadNotes: async function (authorName) {
     const response = await fetch(`/notes/${authorName}/`);
 
     return JSON.parse(JSON.stringify(await response.json()));
-}
+},
 
-export async function createNote(authorName, noteTitle, noteContent) {
+createNote: async function (authorName, noteTitle, noteContent) {
     const response = await fetch(`/notes/`, {
         method: "POST",
         header: {
@@ -26,17 +29,17 @@ export async function createNote(authorName, noteTitle, noteContent) {
     });
 
     return response.json();
-}
+},
 
-export async function deleteNote(noteID) {
+deleteNote: async function (noteID) {
     const response = await fetch(`/notes/${noteID}/`, {
         method: "DELETE",
     });
 
     return await response.json();
-}
+},
 
-export async function updateNote(noteID, noteTitle, noteContent) {
+updateNote: async function (noteID, noteTitle, noteContent) {
     const response = await fetch(`/notes/${noteID}/`, {
         method: "PUT",
         body: JSON.stringify({
@@ -46,4 +49,6 @@ export async function updateNote(noteID, noteTitle, noteContent) {
     });
 
     return await response.json();
+},
+
 }
