@@ -7,48 +7,45 @@
 /* it's the calling code responsibility to check for errors */
 
 export const network = {
+    loadNotes: async function (authorName) {
+        const response = await fetch(`/notes/${authorName}/`);
 
+        return JSON.parse(JSON.stringify(await response.json()));
+    },
 
-loadNotes: async function (authorName) {
-    const response = await fetch(`/notes/${authorName}/`);
+    createNote: async function (authorName, noteTitle, noteContent) {
+        const response = await fetch(`/notes/`, {
+            method: "POST",
+            header: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                Title: noteTitle,
+                Content: noteContent,
+                Author: authorName
+            }),
+        });
 
-    return JSON.parse(JSON.stringify(await response.json()));
-},
+        return response.json();
+    },
 
-createNote: async function (authorName, noteTitle, noteContent) {
-    const response = await fetch(`/notes/`, {
-        method: "POST",
-        header: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            Title: noteTitle,
-            Content: noteContent,
-            Author: authorName
-        }),
-    });
+    deleteNote: async function (noteID) {
+        const response = await fetch(`/notes/${noteID}/`, {
+            method: "DELETE",
+        });
 
-    return response.json();
-},
+        return await response.json();
+    },
 
-deleteNote: async function (noteID) {
-    const response = await fetch(`/notes/${noteID}/`, {
-        method: "DELETE",
-    });
+    updateNote: async function (noteID, noteTitle, noteContent) {
+        const response = await fetch(`/notes/${noteID}/`, {
+            method: "PUT",
+            body: JSON.stringify({
+                Title: noteTitle,
+                Content: noteContent,
+            }),
+        });
 
-    return await response.json();
-},
-
-updateNote: async function (noteID, noteTitle, noteContent) {
-    const response = await fetch(`/notes/${noteID}/`, {
-        method: "PUT",
-        body: JSON.stringify({
-            Title: noteTitle,
-            Content: noteContent,
-        }),
-    });
-
-    return await response.json();
-},
-
+        return await response.json();
+    },
 }
