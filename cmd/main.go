@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"net/http"
 
-	api "github.com/Nicolas1st/goNote/app/api/note"
-	"github.com/Nicolas1st/goNote/app/model/database"
-	entity "github.com/Nicolas1st/goNote/app/model/entities/note"
-	"github.com/Nicolas1st/goNote/app/model/migrations"
+	api "github.com/Nicolas1st/goNote/api/note"
+	"github.com/Nicolas1st/goNote/persistence/model/database"
+	entity "github.com/Nicolas1st/goNote/persistence/model/entities/note"
+	"github.com/Nicolas1st/goNote/persistence/model/migrations"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 

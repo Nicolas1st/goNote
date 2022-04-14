@@ -3,7 +3,7 @@ package api
 import (
 	"net/http"
 
-	"github.com/Nicolas1st/goNote/app/model/entities/note"
+	"github.com/Nicolas1st/goNote/persistence/model/entities/note"
 	"github.com/gorilla/mux"
 )
 
