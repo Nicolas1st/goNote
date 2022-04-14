@@ -1,8 +1,8 @@
-package api
+package middlewares
 
 import "net/http"
 
-func HeaderMiddleware(next http.Handler) http.Handler {
+func JsonResponseMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		next.ServeHTTP(w, r)

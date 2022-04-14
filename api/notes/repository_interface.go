@@ -1,4 +1,4 @@
-package api
+package notes
 
 import "github.com/Nicolas1st/goNote/persistence/model"
 
