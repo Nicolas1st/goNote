@@ -4,47 +4,41 @@ import (
 	"fmt"
 	"net/http"
 
-	api "github.com/Nicolas1st/goNote/api/note"
-	"github.com/Nicolas1st/goNote/persistence/model/database"
-	entity "github.com/Nicolas1st/goNote/persistence/model/entities/note"
-	"github.com/Nicolas1st/goNote/persistence/model/migrations"
+	"github.com/Nicolas1st/goNote/api/notes"
+	"github.com/Nicolas1st/goNote/persistence/database"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
 func main() {
+	// the reason for serving them separately is that
+	// there are other files in directories used for development
+	// it's temporary
 
-	// serving css files
-	fsCSS := http.FileServer(http.Dir("../static/css"))
-	http.Handle("/static/css/", http.StripPrefix("/static/css/", fsCSS))
+	// serving html
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "../web/html/index.html")
+	})
 
-	// serving js files
-	fsJS := http.FileServer(http.Dir("../static/js"))
-	http.Handle("/static/js/", http.StripPrefix("/static/js/", fsJS))
+	// serving css
+	css := http.FileServer(http.Dir("../web/css"))
+	http.Handle("/static/css/", http.StripPrefix("/static/css/", css))
+
+	// serving js
+	js := http.FileServer(http.Dir("../web/js"))
+	http.Handle("/static/js/", http.StripPrefix("/static/js/", js))
 
 	// db initialization
-	dbEnv := database.Env{
-		DatabaseDialect: "sqlite3",
-		DatabaseName:    "test.db",
+	db, err := database.NewDatabase("sqlite3", "test.db")
+	if err != nil {
+		panic(err)
 	}
 
-	// creating tables in the db if the don't exist
-	migrations.Initialize(&dbEnv)
-
 	// creating a router for notes resource
-	notesResource := api.NewNotesResourceRouter(entity.NoteEntity{
-		DatabaseEnv: &dbEnv,
-	})
-
-	http.Handle("/notes/", notesResource)
-
-	// serving the index page
-	http.HandleFunc("/start", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "../static/html/index.html")
-	})
+	notesRouter := notes.NewNotesResourceRouter(db)
+	http.Handle("/notes/", notesRouter)
 
 	// running the server
 	port := ":8880"
 	fmt.Printf("Server is listening on port %v\n", port)
 	http.ListenAndServe(port, nil)
-
 }
