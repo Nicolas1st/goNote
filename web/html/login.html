@@ -11,20 +11,23 @@
     <body>
         <h1 class="title">NoteApp</h1>
         <main class="main">
-            <form action="" class="form">
-                <div class="field title-field">
-                    <label for="name">Title</label>
-                    <input type="text" name="name" id="name" class="form-input" required>
-                </div>
-                <div class="field title-field">
-                    <label for="password">Title</label>
-                    <input type="password" name="password" id="password" class="form-input" required>
-                </div>
-                <input type="submit" value="Add" id="create-new-note-button" class="form-input">
-            </form>
+            <div class="form-container">
+                <form action="/auth/login" class="form">
+                    <div>
+                        <div class="field title-field">
+                            <label for="name">Title</label>
+                            <input type="text" name="name" id="name" class="form-input" required>
+                        </div>
+                        <br/>
+                        <div class="field title-field">
+                            <label for="password">Password</label>
+                            <input type="password" name="password" id="password" class="form-input" required>
+                        </div>
+                    </div>
+                    <input type="submit" value="Login" id="create-new-note-button" class="form-input">
+                </form>
+            </div>
         </main>
-
-        <script src="/static/js/index.js"></script>
     </body>
 </html>
 {{end}}
