@@ -1,0 +1,30 @@
+{{define "login.html"}}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=j, initial-scale=1.0" />
+        <title>NoteApp</title>
+        <link rel="stylesheet" href="/static/css/style.css">
+    </head>
+    <body>
+        <h1 class="title">NoteApp</h1>
+        <main class="main">
+            <form action="" class="form">
+                <div class="field title-field">
+                    <label for="name">Title</label>
+                    <input type="text" name="name" id="name" class="form-input" required>
+                </div>
+                <div class="field title-field">
+                    <label for="password">Title</label>
+                    <input type="password" name="password" id="password" class="form-input" required>
+                </div>
+                <input type="submit" value="Add" id="create-new-note-button" class="form-input">
+            </form>
+        </main>
+
+        <script src="/static/js/index.js"></script>
+    </body>
+</html>
+{{end}}
