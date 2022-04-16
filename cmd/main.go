@@ -4,7 +4,10 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/Nicolas1st/goNote/api/auth"
+	"github.com/Nicolas1st/goNote/api/middlewares"
 	"github.com/Nicolas1st/goNote/api/notes"
+	"github.com/Nicolas1st/goNote/api/views"
 	"github.com/Nicolas1st/goNote/persistence/database"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
@@ -15,9 +18,17 @@ func main() {
 	// it's temporary
 
 	// serving html
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "../web/html/index.html")
-	})
+	viewsRouter := views.NewViewsRouter("../web/html")
+	http.Handle("/", middlewares.AuthenticationMiddleware(viewsRouter, func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("You need to login"))
+	}))
+
+	// adding authentication
+	http.Handle("/auth/", auth.NewAuthRouter())
+
+	// http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	// 	http.ServeFile(w, r, "../web/html/index.html")
+	// })
 
 	// serving css
 	css := http.FileServer(http.Dir("../web/css"))
