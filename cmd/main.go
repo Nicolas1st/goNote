@@ -18,7 +18,7 @@ func main() {
 	// it's temporary
 
 	// serving html
-	viewsRouter := views.NewViewsRouter("../web/html")
+	viewsRouter := views.NewViewsRouter("./web/html")
 	http.Handle("/", middlewares.AuthenticationMiddleware(viewsRouter, func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("You need to login"))
 	}))
@@ -27,15 +27,15 @@ func main() {
 	http.Handle("/auth/", auth.NewAuthRouter())
 
 	// http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-	// 	http.ServeFile(w, r, "../web/html/index.html")
+	// 	http.ServeFile(w, r, "./web/html/index.html")
 	// })
 
 	// serving css
-	css := http.FileServer(http.Dir("../web/css"))
+	css := http.FileServer(http.Dir("./web/css"))
 	http.Handle("/static/css/", http.StripPrefix("/static/css/", css))
 
 	// serving js
-	js := http.FileServer(http.Dir("../web/js"))
+	js := http.FileServer(http.Dir("./web/js"))
 	http.Handle("/static/js/", http.StripPrefix("/static/js/", js))
 
 	// db initialization
