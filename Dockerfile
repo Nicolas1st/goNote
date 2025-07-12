@@ -6,9 +6,10 @@ RUN mkdir -p /home/app
 COPY . /home/app
 WORKDIR /home/app
 
-RUN go mod download
-RUN cd cmd && go build main.go
+RUN go mod download \
+	go build ./main/main.go \
+	npm run build
 WORKDIR /home/app/cmd
 
 EXPOSE 8880
-CMD ["./main"]
+CMD ["./cmd/main"]
