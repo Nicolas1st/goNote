@@ -1,8 +1,9 @@
-# Simple Note API
+# goNote
 
-An API project built with the idea of separting database and api code.
+An application for note taking. Built in such a way so that
+it'd possible to run it both on a server and in the browser only (no server part).
 
-## Structure
+# Structure
 
 cmd
 - [main.go](./cmd/main.go)
