@@ -21,6 +21,6 @@ func main() {
 	http.Handle("/notes/", api.NewNotesResourceRouter(db))
 
 	port := ":8880"
-	fmt.Printf("Server is listening on port %v\n", port)
+	fmt.Printf("Server is listening on  http://localhost%v\n", port)
 	http.ListenAndServe(port, nil)
 }
