@@ -1,0 +1,269 @@
+* {
+    color: black;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}/* container */
+.form-container {
+    background-color: coral;
+    padding: 30px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* its child */
+.form-title {
+    font-size: 45px;
+}
+
+/* its child */
+.form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+
+    flex-grow: 1;
+}
+
+/* common styles for labels and inputs and their containers */
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form label {
+    display: block;
+
+    font-weight: 700;
+    font-size: 25px;
+}
+
+.form input, .form textarea {
+    width: 100%;
+    padding: 1em;
+
+    border: none;
+    border-radius: 20px;
+
+    font-size: 20px;
+}
+
+.form input {
+    height: 3em;
+
+    display: block;
+}
+
+/* content */
+.content-field {
+    flex-grow: 1;
+}
+
+.form-container textarea {
+    height: 100%;
+
+    resize: none;
+}
+
+/* submit button */
+.form-container input[type=submit] {
+    background-color: greenyellow;
+}
+
+@media screen and (max-width: 420px) {
+    .form-title {
+        font-size: 35px;
+    }
+}/* main section styling */
+/* and styles influencing layout and form/size of elements inside it */
+.main {
+    height: 90%;
+    display: flex;
+    overflow: hidden;
+    border-radius: 50px;
+}
+
+.form-container {
+    width: 35%;
+}
+
+.notes-container {
+    width: 65%;
+}
+
+/* header */
+h1.title {
+    font-size: 50px;
+    flex-grow: 0;
+}
+
+@media screen and (max-width: 1130px) {
+    .main {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .form-container {
+        width: 100%;
+    }
+
+    .notes-container {
+        width: 100%;
+    }
+}
+.notes-container {
+    padding: 30px;
+    overflow: scroll;
+    scrollbar-width: none;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 30px;
+
+    background-color: rgb(1, 83, 1);
+}
+
+.note {
+    height: 300px;
+    min-width: 0;
+
+    padding: 15px;
+    border-radius: 20px;
+
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+
+    position: relative;
+
+    color: white;
+    background-color: rgb(73, 107, 57);
+}
+
+.note .title,
+.note .content {
+    padding: 5px;
+    border-radius: 10px;
+    scrollbar-width: none;
+}
+
+.note .title {
+    width: 82%;
+    min-height: 46px;
+    max-height: 46px;
+
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+
+    color: inherit;
+    font-size: 30px;
+}
+
+.note .content {
+    flex-grow: 1;
+
+    overflow-wrap: break-word;
+    overflow: scroll;
+
+    position: relative;
+
+    font-size: 20px;
+    background-color: white;
+}
+
+.note .change-button {
+    height: 50px;
+    width: 50px;
+
+    background-color: coral;
+}
+
+.note .remove-button {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+
+    position: absolute;
+    top: 22px;
+    right: 15px;
+
+    background-color: coral;
+}
+
+.note .remove-button::before,
+.note .remove-button::after {
+    height: 24px;
+    width: 5px;
+    border-radius: 2.5px;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    content: "";
+    background-color: black;
+}
+
+.note .remove-button::before {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.note .remove-button::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.note .save-changes-button {
+    width: 100%;
+    height: 15%;
+    border-radius: 10px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: greenyellow;
+}
+
+@media screen and (max-width: 1400px) {
+    .notes-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .notes-container {
+        grid-template-columns: 1fr;
+    }
+}
+body {
+    height: 100vh;
+    padding: 3vh 12vw;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    gap: 3vh;
+
+    background-color: bisque;
+}
+
+@media screen and (max-width: 1130px) {
+    body {
+        height: 160vh;
+    }
+}
+
+/* reseting looks of elements across all browsers */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+[contenteditable] {
+  outline: 0px solid transparent;
+}
