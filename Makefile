@@ -1,4 +1,4 @@
-build: backend css
+build: backend
 
 backend:
 	go build -o main ./cmd/main.go
@@ -6,5 +6,3 @@ backend:
 run: build
 	./main
 
-css: ./web/css/*
-	cat ./web/css/* > ./static/style.css
