@@ -42,7 +42,7 @@ func (db *Database) UpdateNoteByID(id string, fields *model.Note) *model.Note {
 
 func (db *Database) DeleteNoteByID(id string) *model.Note {
 	var note model.Note
-	db.Where(&model.Note{NoteID: id}).Delete(&note)
+	db.Unscoped().Where(&model.Note{NoteID: id}).Delete(&note)
 
 	return &note
 }
