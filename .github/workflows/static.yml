@@ -1,12 +1,10 @@
-name: static goNote
+name: goNote github pages
 
 on:
   push:
     branches: ["main"]
   workflow_dispatch:
-
-permissions:
-  contents: read
+permissions: contents: read
   pages: write
   id-token: write
 
@@ -28,8 +26,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
-          path: './static'
+          publish_dir: '/static'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
