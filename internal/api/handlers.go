@@ -1,4 +1,4 @@
-package notes
+package api
 
 import (
 	"encoding/json"
@@ -6,12 +6,12 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/Nicolas1st/goNote/persistence/model"
+	"github.com/Nicolas1st/goNote/internal/model"
 	"github.com/gorilla/mux"
 )
 
 type NotesResource struct {
-	repository NotesRepositoryInterface
+	repository NotesStore
 }
 
 func (resource *NotesResource) GetNoteByID(w http.ResponseWriter, r *http.Request) {

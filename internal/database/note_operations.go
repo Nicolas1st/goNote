@@ -3,7 +3,7 @@ package database
 import (
 	"fmt"
 
-	"github.com/Nicolas1st/goNote/persistence/model"
+	"github.com/Nicolas1st/goNote/internal/model"
 )
 
 func (db *Database) GetNoteByID(id uint) *model.Note {

@@ -1,8 +1,10 @@
-package notes
+package api
 
-import "github.com/Nicolas1st/goNote/persistence/model"
+import (
+	"github.com/Nicolas1st/goNote/internal/model"
+)
 
-type NotesRepositoryInterface interface {
+type NotesStore interface {
 	GetNoteByID(id uint) *model.Note
 	GetAllNotesByAuthor(author string) *[]model.Note
 	StoreNote(note *model.Note) (*model.Note, error)

@@ -1,19 +1,18 @@
-package notes
+package api
 
 import (
 	"net/http"
 
-	"github.com/Nicolas1st/goNote/api/middlewares"
 	"github.com/gorilla/mux"
 )
 
-func NewNotesResourceRouter(repository NotesRepositoryInterface) *mux.Router {
+func NewNotesResourceRouter(repository NotesStore) *mux.Router {
 	notesResource := &NotesResource{
 		repository: repository,
 	}
 
 	router := mux.NewRouter()
-	router.Use(middlewares.JsonResponseMiddleware)
+	router.Use(JsonResponseMiddleware)
 
 	router.HandleFunc("/notes/{id:[0-9]+}/",
 		notesResource.GetNoteByID,

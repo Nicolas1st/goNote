@@ -1,7 +1,7 @@
 package database
 
 import (
-	"github.com/Nicolas1st/goNote/persistence/model"
+	"github.com/Nicolas1st/goNote/internal/model"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
@@ -17,7 +17,7 @@ func NewDatabase(DatabaseDialect, DatabaseName string) (*Database, error) {
 		return database, err
 	}
 
-	database.PerformMigrations()
+	database.performMigrations()
 
 	return database, nil
 }
@@ -26,6 +26,6 @@ func (db *Database) CloseConnnection() error {
 	return db.Close()
 }
 
-func (db *Database) PerformMigrations() {
+func (db *Database) performMigrations() {
 	db.AutoMigrate(&model.Note{})
 }
