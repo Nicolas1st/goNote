@@ -13,7 +13,7 @@ func main() {
 	http.Handle("/", http.FileServer(http.Dir("./static/")))
 
 	// db initialization
-	db, err := database.NewDatabase("sqlite3", "test.db")
+	db, err := database.NewDatabase("sqlite3", "notes.db")
 	if err != nil {
 		panic(fmt.Errorf("Failed to initialized the database: %w", err))
 	}
