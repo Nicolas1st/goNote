@@ -1,1 +1,262 @@
-(()=>{"use strict";const e=function(e,t,n){const o=document.createElement("div");o.classList.add("note");const a=document.createElement("h2");a.innerText=e,a.classList.add("title"),a.setAttribute("contenteditable","true");const c=document.createElement("p");c.innerText=t,c.setAttribute("contenteditable","true"),c.classList.add("content");const i=document.createElement("div");i.classList.add("remove-button");const s=document.createElement("div");return s.classList.add("save-changes-button"),s.innerText="Save",s.addEventListener("click",()=>{o.removeChild(s),o.dataset.modified=!1,o.dispatchEvent(new Event("notechange",{bubbles:!0}))}),o.appendChild(a),o.appendChild(c),o.appendChild(i),o.dataset.id=n,o.dataset.modified=!1,o.addEventListener("input",e=>{o.dataset.modified&&(o.dataset.modified=!0,o.appendChild(s))}),o},t=function(t,...n){const o=document.querySelector(".notes-container");t&&(o.innerHTML=""),n.forEach(t=>{o.appendChild(e(t.Title,t.Content,t.NoteID))})};document.addEventListener("DOMContentLoaded",async()=>{try{const e=await async function(e){const t=await fetch(`/notes/${e}/`);return JSON.parse(JSON.stringify(await t.json()))}("Nicolas");t(!1,...e)}catch(e){console.log("Could not connect to the api"),console.log(e)}});const n=document.querySelector(".form");n.addEventListener("submit",async e=>{if(e.preventDefault(),!n.reportValidity())return;const o=n.querySelector("#title"),a=n.querySelector("#content");let c;try{c=await async function(e,t,n,o){return(await fetch("/notes/",{method:"POST",header:{"Content-Type":"application/json"},body:JSON.stringify({NoteID:e,Title:n,Content:o,Author:t})})).json()}(Date.now().toString(),"Nicolas",o.value,a.value)}catch(e){console.log("Error occured when making a request to the api"),console.log(e)}o.value="",a.value="",t(!1,c)}),n.addEventListener("keypress",e=>{if("Enter"===e.key&&(e.shiftKey&&(e.target.form.dispatchEvent(new Event("submit",{cancelable:!0})),e.preventDefault()),e.target instanceof HTMLInputElement)){e.preventDefault();const t=e.target.parentElement.nextSibling.nextSibling.querySelector(".form-input");t instanceof HTMLElement&&t.focus()}}),document.querySelector(".notes-container").addEventListener("click",async e=>{const t=e.target;if(!t.classList.contains("remove-button"))return;const n=t.closest(".note");try{await async function(e){const t=await fetch(`/notes/${e}/`,{method:"DELETE"});return await t.json()}(n.dataset.id)}catch(e){return console.log("Could not make the request to delete the note"),void console.log(e)}!function(e){document.querySelector(".notes-container").removeChild(e)}(n)}),document.addEventListener("notechange",async t=>{const n=t.target,o=n.dataset.id,a=n.querySelector(".title").innerText,c=n.querySelector(".content").innerText;let i;try{i=await async function(e,t,n){const o=await fetch(`/notes/${e}/`,{method:"PUT",body:JSON.stringify({Title:t,Content:n})});return await o.json()}(o,a,c)}catch(e){return console.log("Could not make the request to delete the note"),void console.log(e)}!function(t){const n=document.querySelector(".notes-container"),o=e(t.Title,t.Content,t.NoteID),a=n.querySelector(`[data-id="${t.NoteID}"]`);n.replaceChild(o,a)}(i)})})();
+// creating an HTML component for note
+const components = {
+    newNoteComponent: function (noteTitle, noteContent, noteID) {
+        // note itself
+        const note = document.createElement("div");
+        note.classList.add("note");
+
+        // note's title
+        const title = document.createElement("h2");
+        title.innerText = noteTitle;
+        title.classList.add("title");
+        title.setAttribute("contenteditable", "true");
+
+        // note's content
+        const content = document.createElement("p");
+        content.innerText = noteContent;
+        content.setAttribute("contenteditable", "true");
+        content.classList.add("content");
+
+        // note's remove button
+        const removeButton = document.createElement("div");
+        removeButton.classList.add("remove-button");
+
+        // note's save changes button
+        const saveChangesButton = document.createElement("div");
+        saveChangesButton.classList.add("save-changes-button");
+        saveChangesButton.innerText = "Save";
+
+        saveChangesButton.addEventListener("click", () => {
+            note.removeChild(saveChangesButton);
+            note.dataset.modified = false;
+
+            note.dispatchEvent(
+                new Event("notechange", {
+                    bubbles: true,
+                })
+            );
+        });
+
+        // assembling
+        note.appendChild(title);
+        note.appendChild(content);
+        note.appendChild(removeButton);
+
+        // setting data attributes
+        note.dataset.id = noteID;
+        note.dataset.modified = false;
+
+        // handling contents change event
+        note.addEventListener("input", (e) => {
+            if (!note.dataset.modified) {
+                return;
+            }
+
+            note.dataset.modified = true;
+            note.appendChild(saveChangesButton);
+        });
+
+        return note;
+    },
+};
+
+// the presentation object presents changes (renders) what's requested
+const presentation = {
+    displayNoteComponents: function (replace, ...notes) {
+        const notesContainer = document.querySelector(".notes-container");
+
+        if (replace) {
+            notesContainer.innerHTML = "";
+        }
+
+        // adding notes
+        notes.forEach((note) => {
+            notesContainer.appendChild(
+                components.newNoteComponent(note.Title, note.Content, note.NoteID)
+            );
+        });
+    },
+
+    removeNoteComponent: function (note) {
+        const notesContainer = document.querySelector(".notes-container");
+
+        notesContainer.removeChild(note);
+    },
+
+    updateNoteComponent: function (note) {
+        const notesContainer = document.querySelector(".notes-container");
+
+        const newNote = components.newNoteComponent(note.Title, note.Content, note.NoteID);
+        const oldNote = notesContainer.querySelector(`[data-id="${note.NoteID}"]`);
+
+        notesContainer.replaceChild(newNote, oldNote);
+    },
+};
+
+/* all fucntions defined in the network object work in the following way */
+/* they make requests to the api */
+/* if succesfull they return a json */
+/* otherwise they error out */
+/* it's the calling code responsibility to check for errors */
+const network = {
+    loadNotes: async function (authorName) {
+        const response = await fetch(`/notes/${authorName}/`);
+
+        return JSON.parse(JSON.stringify(await response.json()));
+    },
+
+    createNote: async function (id, authorName, noteTitle, noteContent) {
+        const response = await fetch(`/notes/`, {
+            method: "POST",
+            header: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+				NoteID: id,
+                Title: noteTitle,
+                Content: noteContent,
+                Author: authorName
+            }),
+        });
+
+        return response.json();
+    },
+
+    deleteNote: async function (noteID) {
+        const response = await fetch(`/notes/${noteID}/`, {
+            method: "DELETE",
+        });
+
+        return await response.json();
+    },
+
+    updateNote: async function (noteID, noteTitle, noteContent) {
+        const response = await fetch(`/notes/${noteID}/`, {
+            method: "PUT",
+            body: JSON.stringify({
+                Title: noteTitle,
+                Content: noteContent,
+            }),
+        });
+
+        return await response.json();
+    },
+}
+
+const main = function(components, presentation, network) {
+	// loading available notes from the api on load
+	document.addEventListener("DOMContentLoaded", async () => {
+		try {
+			const notes = await network.loadNotes("Nicolas");
+			presentation.displayNoteComponents(false, ...notes);
+		} catch (error) {
+			console.log("Could not connect to the api");
+			console.log(error);
+		}
+	});
+
+	const newNoteForm = document.querySelector(".form");
+	newNoteForm.addEventListener("submit", async (e) => {
+		e.preventDefault();
+		if (!newNoteForm.reportValidity()) {
+			return;
+		}
+
+		const titleElement = newNoteForm.querySelector("#title");
+		const contentElement = newNoteForm.querySelector("#content");
+
+		// making a request to create a note
+		// if successful displaying changes on the page
+		let createdNote;
+		try {
+			createdNote = await network.createNote(
+				// using a timestamp as an id
+				// because the author is being used as namespace
+				// and also the program is designed for human use
+				// it's very unlikey for a human to create several notes at an exact same millisecond
+				Date.now().toString(),
+				"Nicolas",
+				titleElement.value,
+				contentElement.value
+			);
+		} catch (error) {
+			console.log("Error occured when making a request to the api");
+			console.log(error);
+		}
+
+		// clearing the form fields
+		titleElement.value = "";
+		contentElement.value = "";
+
+		// displaying the note
+		presentation.displayNoteComponents(false, createdNote);
+	});
+
+	// handling Enter key presses on form
+	newNoteForm.addEventListener("keypress", (e) => {
+		if (e.key === "Enter") {
+			// fire submit form event if shift and enter are pressed together
+			if (e.shiftKey) {
+				e.target.form.dispatchEvent(
+					new Event("submit", { cancelable: true })
+				);
+				e.preventDefault();
+			}
+
+			// prevent the input element from firing the submit event
+			if (e.target instanceof HTMLInputElement) {
+				e.preventDefault();
+
+				const nextEl = e.target.parentElement.nextSibling.nextSibling.querySelector(".form-input");
+				if (nextEl instanceof HTMLElement) {
+					nextEl.focus();
+				}
+			}
+		}
+	});
+
+	// removing a note
+	const notesContainer = document.querySelector(".notes-container");
+	notesContainer.addEventListener("click", async (e) => { const removeButton = e.target;
+		// checking whether it is a remove button
+		if (!removeButton.classList.contains("remove-button")) {
+			return;
+		}
+
+		// find the note that that has this button
+		const note = removeButton.closest(".note");
+
+		// making the api request
+		try {
+			const removedNote = await network.deleteNote(note.dataset.id);
+		} catch (error) {
+			console.log("Could not make the request to delete the note");
+			console.log(error);
+			return;
+		}
+
+		// removing the note from the dom if the request was successful
+		presentation.removeNoteComponent(note);
+	});
+
+	document.addEventListener("notechange", async (e) => {
+		const note = e.target;
+
+		const id = note.dataset.id;
+		const title = note.querySelector(".title").innerText;
+		const content = note.querySelector(".content").innerText;
+
+		let updatedNote;
+		try {
+			updatedNote = await network.updateNote(id, title, content);
+		} catch (error) {
+			console.log("Could not make the request to delete the note");
+			console.log(error);
+			return;
+		}
+
+		presentation.updateNoteComponent(updatedNote);
+	});
+}
+
+main(components, presentation, network)
