@@ -13,11 +13,15 @@ func (db *Database) GetNoteByID(id string) *model.Note {
 	return &note
 }
 
-func (db *Database) GetAllNotesByAuthor(author string) *[]model.Note {
+func (db *Database) GetAllNotes() (*[]model.Note, error) {
 	var notes []model.Note
-	db.Where(&model.Note{Author: author}).Find(&notes)
 
-	return &notes
+	result := db.Find(&notes)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return &notes, nil
 }
 
 func (db *Database) StoreNote(note *model.Note) (*model.Note, error) {

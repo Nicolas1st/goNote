@@ -22,13 +22,12 @@ func (resource *NotesResource) GetNoteByID(w http.ResponseWriter, r *http.Reques
 	json.NewEncoder(w).Encode(note)
 }
 
-func (resource *NotesResource) GetAllNotesByAuthor(w http.ResponseWriter, r *http.Request) {
-	// extract path param
-	vars := mux.Vars(r)
-	author := vars["author"]
-
+func (resource *NotesResource) GetALlNotes(w http.ResponseWriter, r *http.Request) {
 	// extract notes from the db
-	notes := resource.repository.GetAllNotesByAuthor(author)
+	notes, err := resource.repository.GetAllNotes()
+	if err != nil {
+		return
+	}
 
 	// send back the response
 	json.NewEncoder(w).Encode(notes)

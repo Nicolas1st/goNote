@@ -7,5 +7,4 @@ type Note struct {
 	NoteID      string `json:"NoteID"`
 	Title   string `json:"Title"`
 	Content string `json:"Content"`
-	Author  string `json:"Author"`
 }

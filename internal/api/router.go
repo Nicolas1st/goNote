@@ -18,8 +18,8 @@ func NewNotesResourceRouter(repository NotesStore) *mux.Router {
 		notesResource.GetNoteByID,
 	).Methods(http.MethodGet)
 
-	router.HandleFunc("/notes/{author:[A-Za-z]+}/",
-		notesResource.GetAllNotesByAuthor,
+	router.HandleFunc("/notes/",
+		notesResource.GetALlNotes,
 	).Methods(http.MethodGet)
 
 	router.HandleFunc("/notes/",

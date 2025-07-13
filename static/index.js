@@ -99,13 +99,13 @@ const presentation = {
 /* otherwise they error out */
 /* it's the calling code responsibility to check for errors */
 const network = {
-    loadNotes: async function (authorName) {
-        const response = await fetch(`/notes/${authorName}/`);
+    loadNotes: async function() {
+        const response = await fetch(`/notes/`);
 
         return JSON.parse(JSON.stringify(await response.json()));
     },
 
-    createNote: async function (id, authorName, noteTitle, noteContent) {
+    createNote: async function (id, noteTitle, noteContent) {
         const response = await fetch(`/notes/`, {
             method: "POST",
             header: {
@@ -115,7 +115,6 @@ const network = {
 				NoteID: id,
                 Title: noteTitle,
                 Content: noteContent,
-                Author: authorName
             }),
         });
 
@@ -147,7 +146,7 @@ const main = function(components, presentation, network) {
 	// loading available notes from the api on load
 	document.addEventListener("DOMContentLoaded", async () => {
 		try {
-			const notes = await network.loadNotes("Nicolas");
+			const notes = await network.loadNotes();
 			presentation.displayNoteComponents(false, ...notes);
 		} catch (error) {
 			console.log("Could not connect to the api");
@@ -175,7 +174,6 @@ const main = function(components, presentation, network) {
 				// and also the program is designed for human use
 				// it's very unlikey for a human to create several notes at an exact same millisecond
 				Date.now().toString(),
-				"Nicolas",
 				titleElement.value,
 				contentElement.value
 			);
