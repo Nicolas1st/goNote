@@ -2,9 +2,7 @@ package api
 
 import (
 	"encoding/json"
-	"math/bits"
 	"net/http"
-	"strconv"
 
 	"github.com/Nicolas1st/goNote/internal/model"
 	"github.com/gorilla/mux"
@@ -15,17 +13,12 @@ type NotesResource struct {
 }
 
 func (resource *NotesResource) GetNoteByID(w http.ResponseWriter, r *http.Request) {
-	// get id
-	vars := mux.Vars(r)
-	id, err := strconv.ParseUint(vars["id"], 10, bits.UintSize)
-	if err != nil {
-		panic(err)
+	id, ok := mux.Vars(r)["id"]
+	if !ok || id == "" {
+		panic("invalid id")
 	}
 
-	// extract the note from the db
-	note := resource.repository.GetNoteByID(uint(id))
-
-	// send back the response
+	note := resource.repository.GetNoteByID(id)
 	json.NewEncoder(w).Encode(note)
 }
 
@@ -42,11 +35,9 @@ func (resource *NotesResource) GetAllNotesByAuthor(w http.ResponseWriter, r *htt
 }
 
 func (resource *NotesResource) PostNote(w http.ResponseWriter, r *http.Request) {
-	// extracmodel. from the http request body
 	note := &model.Note{}
 	json.NewDecoder(r.Body).Decode(note)
 
-	// store the note
 	note, err := resource.repository.StoreNote(note)
 	if err != nil {
 		panic(err)
@@ -57,38 +48,29 @@ func (resource *NotesResource) PostNote(w http.ResponseWriter, r *http.Request) 
 }
 
 func (resource *NotesResource) UpdateNoteByID(w http.ResponseWriter, r *http.Request) {
-	// extract param from the url
-	vars := mux.Vars(r)
-	id, err := strconv.ParseUint(vars["id"], 10, bits.UintSize)
-	if err != nil {
+	id, ok := mux.Vars(r)["id"]
+	if !ok || id == "" {
+		panic("invalid id")
+	}
+
+	var newNote model.Note
+	
+	if err := json.NewDecoder(r.Body).Decode(&newNote); err != nil {
 		panic(err)
 	}
 
-	// extract fiels from the http request body
-	var noteWithFieldsToUpdate model.Note
-	err = json.NewDecoder(r.Body).Decode(&noteWithFieldsToUpdate)
-	if err != nil {
-		panic(err)
-	}
+	note := resource.repository.UpdateNoteByID(id, &newNote)
 
-	// update the note in the db
-	note := resource.repository.UpdateNoteByID(uint(id), &noteWithFieldsToUpdate)
-
-	// send backe the response
 	json.NewEncoder(w).Encode(note)
 }
 
 func (resource *NotesResource) DeleteNoteByID(w http.ResponseWriter, r *http.Request) {
-	// extract param from the url
-	vars := mux.Vars(r)
-	id, err := strconv.ParseUint(vars["id"], 10, bits.UintSize)
-	if err != nil {
-		panic(err)
+	id, ok := mux.Vars(r)["id"]
+	if !ok {
+		panic("invalid id")
 	}
 
-	// delete the note in the db
-	note := resource.repository.DeleteNoteByID(uint(id))
+	note := resource.repository.DeleteNoteByID(id)
 
-	// send send back the response
 	json.NewEncoder(w).Encode(note)
 }

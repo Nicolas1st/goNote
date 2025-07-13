@@ -16,7 +16,7 @@ export const presentation = {
         // adding notes
         notes.forEach((note) => {
             notesContainer.appendChild(
-                components.newNoteComponent(note.Title, note.Content, note.ID)
+                components.newNoteComponent(note.Title, note.Content, note.NoteID)
             );
         });
     },
@@ -30,8 +30,8 @@ export const presentation = {
     updateNoteComponent: function (note) {
         const notesContainer = document.querySelector(".notes-container");
 
-        const newNote = components.newNoteComponent(note.Title, note.Content, note.ID);
-        const oldNote = notesContainer.querySelector(`[data-id="${note.ID}"]`);
+        const newNote = components.newNoteComponent(note.Title, note.Content, note.NoteID);
+        const oldNote = notesContainer.querySelector(`[data-id="${note.NoteID}"]`);
 
         notesContainer.replaceChild(newNote, oldNote);
     },

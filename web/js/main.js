@@ -27,6 +27,11 @@ newNoteForm.addEventListener("submit", async (e) => {
     let createdNote;
     try {
         createdNote = await network.createNote(
+			// using a timestamp as an id
+			// because the author is being used as namespace
+			// and also the program is designed for human use
+			// it's very unlikey for a human to create several notes at an exact same millisecond
+			Date.now().toString(),
             "Nicolas",
             titleElement.value,
             contentElement.value

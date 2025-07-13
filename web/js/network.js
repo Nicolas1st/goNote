@@ -13,13 +13,14 @@ export const network = {
         return JSON.parse(JSON.stringify(await response.json()));
     },
 
-    createNote: async function (authorName, noteTitle, noteContent) {
+    createNote: async function (id, authorName, noteTitle, noteContent) {
         const response = await fetch(`/notes/`, {
             method: "POST",
             header: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+				NoteID: id,
                 Title: noteTitle,
                 Content: noteContent,
                 Author: authorName

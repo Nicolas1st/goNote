@@ -5,9 +5,9 @@ import (
 )
 
 type NotesStore interface {
-	GetNoteByID(id uint) *model.Note
+	GetNoteByID(id string) *model.Note
 	GetAllNotesByAuthor(author string) *[]model.Note
 	StoreNote(note *model.Note) (*model.Note, error)
-	UpdateNoteByID(id uint, fields *model.Note) *model.Note
-	DeleteNoteByID(id uint) *model.Note
+	UpdateNoteByID(id string, fields *model.Note) *model.Note
+	DeleteNoteByID(id string) *model.Note
 }
