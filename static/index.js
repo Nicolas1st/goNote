@@ -1,3 +1,14 @@
+const onlyUseLocalstorage = true; 
+const isBackendAvailable = async function() {
+	try {
+		await fetch(`/notes/`);
+		onlyUseLocalstorage = false;
+	} catch (error) {
+	}
+}
+isBackendAvailable();
+
+
 // creating an HTML component for note
 const components = {
     newNoteComponent: function (noteTitle, noteContent, noteID) {
@@ -105,16 +116,16 @@ const network = {
         return JSON.parse(JSON.stringify(await response.json()));
     },
 
-    createNote: async function (id, noteTitle, noteContent) {
+    createNote: async function (note) {
         const response = await fetch(`/notes/`, {
             method: "POST",
             header: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-				NoteID: id,
-                Title: noteTitle,
-                Content: noteContent,
+				NoteID: note.NoteID,
+                Title: note.Title,
+                Content: note.Content
             }),
         });
 
@@ -145,13 +156,24 @@ const network = {
 const main = function(components, presentation, network) {
 	// loading available notes from the api on load
 	document.addEventListener("DOMContentLoaded", async () => {
-		try {
-			const notes = await network.loadNotes();
-			presentation.displayNoteComponents(false, ...notes);
-		} catch (error) {
-			console.log("Could not connect to the api");
-			console.log(error);
+		let notes = [];
+
+		if (onlyUseLocalstorage) {
+			notesFromStorage = {...localStorage};
+			for (let NoteID in notesFromStorage) {
+				notes.push(JSON.parse(notesFromStorage[NoteID]))
+			}
+		} else {
+			try {
+				notes = await network.loadNotes();
+				notes.forEach((note) => {
+					localStorage.setItem(note.NoteID, JSON.stringify(note))
+				});
+			} catch (error) {
+			}
 		}
+
+		presentation.displayNoteComponents(false, ...notes);
 	});
 
 	const newNoteForm = document.querySelector(".form");
@@ -164,23 +186,24 @@ const main = function(components, presentation, network) {
 		const titleElement = newNoteForm.querySelector("#title");
 		const contentElement = newNoteForm.querySelector("#content");
 
-		// making a request to create a note
-		// if successful displaying changes on the page
-		let createdNote;
-		try {
-			createdNote = await network.createNote(
-				// using a timestamp as an id
-				// because the author is being used as namespace
-				// and also the program is designed for human use
-				// it's very unlikey for a human to create several notes at an exact same millisecond
-				Date.now().toString(),
-				titleElement.value,
-				contentElement.value
-			);
-		} catch (error) {
-			console.log("Error occured when making a request to the api");
-			console.log(error);
+		let createdNote = {
+			// using a timestamp as an id
+			// because the author is being used as namespace
+			// and also the program is designed for human use
+			// it's very unlikey for a human to create several notes at an exact same millisecond
+			NoteID: Date.now().toString(), 
+			Title: titleElement.value,
+			Content: contentElement.value,
+		};
+
+		if (!onlyUseLocalstorage) {
+			try {
+				await network.createNote(createdNote);
+			} catch (error) {
+			}
 		}
+
+		localStorage.setItem(createdNote.NoteID, JSON.stringify(createdNote))
 
 		// clearing the form fields
 		titleElement.value = "";
@@ -224,14 +247,14 @@ const main = function(components, presentation, network) {
 		// find the note that that has this button
 		const note = removeButton.closest(".note");
 
-		// making the api request
-		try {
-			const removedNote = await network.deleteNote(note.dataset.id);
-		} catch (error) {
-			console.log("Could not make the request to delete the note");
-			console.log(error);
-			return;
+		if (!onlyUseLocalstorage) {
+			try {
+				const removedNote = await network.deleteNote(note.dataset.id);
+			} catch (error) {
+			}
 		}
+
+		localStorage.removeItem(note.dataset.id)
 
 		// removing the note from the dom if the request was successful
 		presentation.removeNoteComponent(note);
@@ -240,18 +263,24 @@ const main = function(components, presentation, network) {
 	document.addEventListener("notechange", async (e) => {
 		const note = e.target;
 
-		const id = note.dataset.id;
-		const title = note.querySelector(".title").innerText;
-		const content = note.querySelector(".content").innerText;
+		const updatedNote = {
+			NoteID: note.dataset.id,
+			Title: note.querySelector(".title").innerText,
+			Content: note.querySelector(".content").innerText
+		};
 
-		let updatedNote;
-		try {
-			updatedNote = await network.updateNote(id, title, content);
-		} catch (error) {
-			console.log("Could not make the request to delete the note");
-			console.log(error);
-			return;
+		if (!onlyUseLocalstorage) {
+			try {
+				await network.updateNote(
+					updatedNote.NoteID,
+					updatedNote.Title,
+					updatedNote.Content
+				);
+			} catch (error) {
+			}
 		}
+
+		localStorage.setItem(updatedNote.NoteID, JSON.stringify(updatedNote))
 
 		presentation.updateNoteComponent(updatedNote);
 	});
