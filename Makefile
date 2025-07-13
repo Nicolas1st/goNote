@@ -1,8 +1,6 @@
 build: backend frontend css
 
-backend: main
-	
-main:
+backend:
 	go build -o main ./cmd/main.go
 
 frontend: ./web/js/*.js
