@@ -1,11 +1,7 @@
-build: backend frontend css
+build: backend css
 
 backend:
 	go build -o main ./cmd/main.go
-
-frontend: ./web/js/*.js
-	cd ./web
-	npm run build
 
 run: build
 	./main
