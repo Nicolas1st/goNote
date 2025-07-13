@@ -1,21 +1,8 @@
 # goNote
 
-An application for note taking. Built in such a way so that
-it'd possible to run it both on a server and in the browser only (no server part).
+An application for note taking.
 
-# Structure
+- Can be run both with and without its backend server
+- Stores notes in local storage and on the backend if it's available
+- No muliple user support is provided (it's designed for personal use)
 
-cmd
-- [main.go](./cmd/main.go)
-
-  Launches the API
-
-app
-- api
-    Contains endpoints handlers.
-    The router for enpoints is built with dependency injection
-
-- model
-    Contains models
-    Database query functions
-    Migrations
